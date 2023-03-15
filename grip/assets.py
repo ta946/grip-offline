@@ -77,34 +77,35 @@ class GitHubAssetManager(ReadmeAssetManager):
         Gets the specified resource and parses all style URLs and their
         assets in the form of the specified patterns.
         """
-        # Check cache
-        if self.cache_path:
-            cached = self._get_cached_style_urls(asset_url_path)
-            # Skip fetching styles if there's any already cached
-            if cached:
-                return cached
+        return []
+        # # Check cache
+        # if self.cache_path:
+        #     cached = self._get_cached_style_urls(asset_url_path)
+        #     # Skip fetching styles if there's any already cached
+        #     if cached:
+        #         return cached
 
-        # Find style URLs
-        r = requests.get(STYLE_URLS_SOURCE)
-        if not 200 <= r.status_code < 300:
-            print('Warning: retrieving styles gave status code',
-                  r.status_code, file=sys.stderr)
-        urls = []
-        content = r.text
-        for style_urls_re in STYLE_URLS_RES:
-            print(re.findall(style_urls_re, content))
-            urls.extend(re.findall(style_urls_re, content))
-        if not urls:
-            print('Warning: no styles found - see https://github.com/joeyespo/'
-                  'grip/issues/265', file=sys.stderr)
+        # # Find style URLs
+        # r = requests.get(STYLE_URLS_SOURCE)
+        # if not 200 <= r.status_code < 300:
+        #     print('Warning: retrieving styles gave status code',
+        #           r.status_code, file=sys.stderr)
+        # urls = []
+        # content = r.text
+        # for style_urls_re in STYLE_URLS_RES:
+        #     print(re.findall(style_urls_re, content))
+        #     urls.extend(re.findall(style_urls_re, content))
+        # if not urls:
+        #     print('Warning: no styles found - see https://github.com/joeyespo/'
+        #           'grip/issues/265', file=sys.stderr)
 
-        # Cache the styles and their assets
-        if self.cache_path:
-            is_cached = self._cache_contents(urls, asset_url_path)
-            if is_cached:
-                urls = self._get_cached_style_urls(asset_url_path)
+        # # Cache the styles and their assets
+        # if self.cache_path:
+        #     is_cached = self._cache_contents(urls, asset_url_path)
+        #     if is_cached:
+        #         urls = self._get_cached_style_urls(asset_url_path)
 
-        return urls
+        # return urls
 
     def _get_cached_style_urls(self, asset_url_path):
         """

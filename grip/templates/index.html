@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="{{ style_url }}" />
   {%- endfor %}
   <link rel="stylesheet" href="{{ url_for('static', filename='octicons/octicons.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='markdown.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='pygments_github.css') }}" />
   {%- if styles %}
   <style>
     {%- for style in styles %}
@@ -33,6 +35,7 @@
 {%- endblock -%}
 
 {%- block scripts -%}
+  <script src="{{ url_for('static', filename='MarkdownPreview_mermaid.js') }}"></script>
   <script>
     function showCanonicalImages() {
       var images = document.getElementsByTagName('img');
@@ -112,15 +115,6 @@
                 {% if not user_content %}
 
                   <div id="readme" class="Box md Box--responsive">
-                    {% if title or filename %}
-                      <div class="Box-header d-flex border-bottom-0 flex-items-center flex-justify-between color-bg-default rounded-top-2">
-                        <div class="d-flex flex-items-center">
-                          <h2 class="Box-title">
-                            {{ title or filename }}
-                          </h2>
-                        </div>
-                      </div>
-                    {% endif %}
                     <div class="Box-body px-5 pb-5">
                       <article id="grip-content" class="markdown-body entry-content container-lg">
                         {{ content|safe }}
