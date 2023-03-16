@@ -2,7 +2,7 @@
 Grip
 ----
 
-Render local readme files before sending off to GitHub.
+Render local markdown files offline.
 
 
 Grip is easy to set up
@@ -10,7 +10,8 @@ Grip is easy to set up
 
 ::
 
-    $ pip install grip
+    $ cd grip-offline
+    $ pip install .
     $ cd myproject
     $ grip
 
@@ -18,7 +19,7 @@ Grip is easy to set up
 Links
 `````
 
-* `Website <http://github.com/joeyespo/grip>`_
+* `Website <https://github.com/ta946/grip-offline>`_
 
 """
 
@@ -32,13 +33,12 @@ def read(filename):
 
 
 setup(
-    name='grip',
+    name='grip-offline',
     version='4.6.1',
-    description='Render local readme files before sending off to GitHub.',
+    description='Render local markdown files offline.',
     long_description=__doc__,
-    author='Joe Esposito',
-    author_email='joe@joeyespo.com',
-    url='http://github.com/joeyespo/grip',
+    author='ta946',
+    url='https://github.com/ta946/grip-offline',
     license='MIT',
     platforms='any',
     packages=find_packages(),
