@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ style_url }}" />
   {%- endfor %}
   <link rel="stylesheet" href="{{ url_for('static', filename='octicons/octicons.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='markdown.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename=markdown_css) }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='pygments_github.css') }}" />
   {%- if styles %}
   <style>
@@ -17,11 +17,6 @@
   </style>
   {%- endif %}
   <style>
-    /* Page tweaks */
-    .preview-page {
-      margin-top: 64px;
-      margin-bottom: 21px;
-    }
     /* User-content tweaks */
     .timeline-comment-wrapper > .timeline-comment:after,
     .timeline-comment-wrapper > .timeline-comment:before {
@@ -35,6 +30,9 @@
 {%- endblock -%}
 
 {%- block scripts -%}
+  <script>
+    const color_scheme = "{{ color_scheme }}"
+  </script>
   <script src="{{ url_for('static', filename='MarkdownPreview_mermaid.js') }}"></script>
   <script>
     function showCanonicalImages() {

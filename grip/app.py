@@ -44,7 +44,7 @@ class Grip(Flask):
     def __init__(self, source=None, auth=None, renderer=None,
                  assets=None, render_wide=None, render_inline=None, title=None,
                  autorefresh=None, quiet=None, grip_url=None,
-                 static_url_path=None, instance_path=None, **kwargs):
+                 static_url_path=None, instance_path=None, dark=False, **kwargs):
         # Defaults
         if source is None or isinstance(source, str_type):
             source = DirectoryReader(source)
@@ -66,6 +66,9 @@ class Grip(Flask):
             if instance_path is None:
                 instance_path = DEFAULT_GRIPHOME
         instance_path = os.path.abspath(os.path.expanduser(instance_path))
+
+        self.markdown_css = 'github-markdown-dark.css' if dark else 'markdown.css'
+        self.color_scheme = 'dark' if dark else 'light'
 
         # Flask application
         super(Grip, self).__init__(
@@ -217,7 +220,8 @@ class Grip(Flask):
             title=self.title, content=content, favicon=favicon,
             user_content=self.renderer.user_content,
             wide_style=self.render_wide, style_urls=self.assets.style_urls,
-            styles=self.assets.styles, autorefresh_url=autorefresh_url)
+            styles=self.assets.styles, autorefresh_url=autorefresh_url,
+            markdown_css=self.markdown_css, color_scheme=self.color_scheme)
 
     def _render_refresh(self, subpath=None):
         if not self.autorefresh:

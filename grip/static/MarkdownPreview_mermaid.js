@@ -15,7 +15,10 @@ function insert_mermaidjs() {
   // import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
   script.innerHTML = `
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
+  mermaid.initialize({
+      startOnLoad: true,
+      theme: '${color_scheme}',
+    });
   `;
   document.head.appendChild(script);
 }

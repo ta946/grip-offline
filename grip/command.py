@@ -24,6 +24,7 @@ Options:
   --export          Exports to <path>.html or README.md instead of
                     serving, optionally using [<address>] as the out
                     file (- for stdout).
+  --dark            Render the theme in dark mode
   -b --browser      Open a tab in the browser after the server starts.
   --title=<title>   Manually sets the page's title.
                     The default is the filename.
@@ -82,7 +83,7 @@ def main(argv=None, force_utf8=True, patch_svg=True):
             export(args['<path>'], args['--user-content'], args['--context'],
                    None, None, True, args['--wide'],
                    True, args['<address>'],
-                   None, args['--title'], args['--quiet'])
+                   None, args['--title'], args['--quiet'], args['--dark'])
             return 0
         except ReadmeNotFoundError as ex:
             print('Error:', ex)
@@ -101,7 +102,7 @@ def main(argv=None, force_utf8=True, patch_svg=True):
         serve(path, host, port, args['--user-content'], args['--context'],
               None, None, True, args['--wide'], False,
               None, args['--title'], not args['--norefresh'],
-              args['--browser'], args['--quiet'], None)
+              args['--browser'], args['--quiet'], None, args['--dark'])
         return 0
     except ReadmeNotFoundError as ex:
         print('Error:', ex)
