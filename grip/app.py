@@ -67,9 +67,6 @@ class Grip(Flask):
                 instance_path = DEFAULT_GRIPHOME
         instance_path = os.path.abspath(os.path.expanduser(instance_path))
 
-        self.markdown_css = 'github-markdown-dark.css' if dark else 'markdown.css'
-        self.color_scheme = theme
-
         # Flask application
         super(Grip, self).__init__(
             __name__, static_url_path=static_url_path,
@@ -115,6 +112,8 @@ class Grip(Flask):
             log = logging.getLogger('werkzeug')
             log.setLevel(logging.ERROR)
         self.theme = theme
+
+        self.markdown_css = 'github-markdown-dark.css' if self.theme == 'dark' else 'markdown.css'
 
         # Overridable attributes
         if self.renderer is None:
@@ -231,9 +230,9 @@ class Grip(Flask):
             user_content=self.renderer.user_content,
             wide_style=self.render_wide, style_urls=self.assets.style_urls,
             styles=self.assets.styles, autorefresh_url=autorefresh_url,
-            markdown_css=self.markdown_css, color_scheme=self.color_scheme)
-            # data_color_mode=data_color_mode, data_light_theme=data_light_theme,
-            # data_dark_theme=data_dark_theme)
+            data_color_mode=data_color_mode, data_light_theme=data_light_theme,
+            data_dark_theme=data_dark_theme,
+            markdown_css=self.markdown_css, theme=self.theme)
 
     def _render_refresh(self, subpath=None):
         if not self.autorefresh:
