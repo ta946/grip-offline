@@ -43,8 +43,8 @@ class Grip(Flask):
     """
     def __init__(self, source=None, auth=None, renderer=None,
                  assets=None, render_wide=None, render_inline=None, title=None,
-                 autorefresh=None, quiet=None, grip_url=None,
-                 static_url_path=None, instance_path=None, dark=False, **kwargs):
+                 autorefresh=None, quiet=None, theme='light', grip_url=None,
+                 static_url_path=None, instance_path=None, **kwargs):
         # Defaults
         if source is None or isinstance(source, str_type):
             source = DirectoryReader(source)
@@ -68,7 +68,7 @@ class Grip(Flask):
         instance_path = os.path.abspath(os.path.expanduser(instance_path))
 
         self.markdown_css = 'github-markdown-dark.css' if dark else 'markdown.css'
-        self.color_scheme = 'dark' if dark else 'light'
+        self.color_scheme = theme
 
         # Flask application
         super(Grip, self).__init__(
@@ -114,6 +114,7 @@ class Grip(Flask):
             import logging
             log = logging.getLogger('werkzeug')
             log.setLevel(logging.ERROR)
+        self.theme = theme
 
         # Overridable attributes
         if self.renderer is None:
@@ -215,6 +216,15 @@ class Grip(Flask):
                            if self.autorefresh
                            else None)
 
+        if self.theme == 'dark':
+            data_color_mode = 'dark'
+            data_light_theme = 'light'
+            data_dark_theme = 'dark'
+        else:
+            data_color_mode = 'light'
+            data_light_theme = 'light'
+            data_dark_theme = 'dark'
+
         return render_template(
             'index.html', filename=self.reader.filename_for(subpath),
             title=self.title, content=content, favicon=favicon,
@@ -222,6 +232,8 @@ class Grip(Flask):
             wide_style=self.render_wide, style_urls=self.assets.style_urls,
             styles=self.assets.styles, autorefresh_url=autorefresh_url,
             markdown_css=self.markdown_css, color_scheme=self.color_scheme)
+            # data_color_mode=data_color_mode, data_light_theme=data_light_theme,
+            # data_dark_theme=data_dark_theme)
 
     def _render_refresh(self, subpath=None):
         if not self.autorefresh:
@@ -401,7 +413,7 @@ class Grip(Flask):
             route = '/'
         with self.test_client() as c:
             response = c.get(route, follow_redirects=True)
-            encoding = response.charset
+            encoding = getattr(response, 'charset', 'utf-8')
             return response.data.decode(encoding)
 
     def run(self, host=None, port=None, debug=None, use_reloader=None,

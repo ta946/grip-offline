@@ -24,13 +24,14 @@ Options:
   --export          Exports to <path>.html or README.md instead of
                     serving, optionally using [<address>] as the out
                     file (- for stdout).
-  --dark            Render the theme in dark mode
   -b --browser      Open a tab in the browser after the server starts.
   --title=<title>   Manually sets the page's title.
                     The default is the filename.
   --norefresh       Do not automatically refresh the Readme content when
                     the file changes.
   --quiet           Do not print to the terminal.
+  --theme=<theme>   Theme to view markdown file (light mode or dark mode).
+                    Valid options ("light", "dark"). Default: "light"
 """
 
 from __future__ import print_function
@@ -51,6 +52,8 @@ from .exceptions import ReadmeNotFoundError
 usage = '\n\n\n'.join(__doc__.split('\n\n\n')[1:])
 version = 'Grip ' + __version__
 
+# Note: GitHub supports more than light mode and dark mode (exp: light-high-constrast, dark-high-constrast).
+VALID_THEME_OPTIONS = ['light', 'dark']
 
 def main(argv=None, force_utf8=True, patch_svg=True):
     """
@@ -77,13 +80,23 @@ def main(argv=None, force_utf8=True, patch_svg=True):
         clear_cache()
         return 0
 
+    # Parse theme argument
+    if args['--theme']:
+        if args['--theme'] in VALID_THEME_OPTIONS:
+            theme: str = args['--theme']
+        else:
+            print('Error: valid options for theme argument are "light", "dark"')
+            return 1
+    else:
+        theme = 'light'
+
     # Export to a file instead of running a server
     if args['--export']:
         try:
             export(args['<path>'], args['--user-content'], args['--context'],
                    None, None, True, args['--wide'],
                    True, args['<address>'],
-                   None, args['--title'], args['--quiet'], args['--dark'])
+                   None, args['--title'], args['--quiet'], theme)
             return 0
         except ReadmeNotFoundError as ex:
             print('Error:', ex)
@@ -102,7 +115,7 @@ def main(argv=None, force_utf8=True, patch_svg=True):
         serve(path, host, port, args['--user-content'], args['--context'],
               None, None, True, args['--wide'], False,
               None, args['--title'], not args['--norefresh'],
-              args['--browser'], args['--quiet'], None, args['--dark'])
+              args['--browser'], args['--quiet'], theme, None)
         return 0
     except ReadmeNotFoundError as ex:
         print('Error:', ex)

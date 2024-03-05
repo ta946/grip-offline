@@ -45,10 +45,10 @@ $ grip
 Now open a browser and visit [http://localhost:6419](http://localhost:6419/).
 
 
-You can also specify a port, used `--dark` to render in dark mode and/or use `-b` to automatically open a new browser tab for you.:
+You can also specify a port, used `--theme="dark"` to render in dark mode and/or use `-b` to automatically open a new browser tab for you.:
 
 ```console
-$ grip 80 -b --dark
+$ grip 80 -b --theme="dark"
  * Running on http://localhost:80/
 ```
 
@@ -192,7 +192,7 @@ Runs a local server and renders the Readme file located
 at `path` when visited in the browser.
 
 ```python
-serve(path=None, host=None, port=None, user_content=False, context=None, username=None, password=None, render_offline=False, render_wide=False, render_inline=False, api_url=None, title=None, autorefresh=True, browser=False, grip_class=None, dark=False)
+serve(path=None, host=None, port=None, user_content=False, context=None, username=None, password=None, render_offline=False, render_wide=False, render_inline=False, api_url=None, title=None, autorefresh=True, browser=False, theme='light', grip_class=None)
 ```
 
 - `path`: The filename to render, or the directory containing your Readme file, defaulting to the current working directory
@@ -211,7 +211,6 @@ serve(path=None, host=None, port=None, user_content=False, context=None, usernam
 - `autorefresh`: Automatically update the rendered content when the Readme file changes, `True` by default
 - `browser`: Open a tab in the browser after the server starts., `False` by default
 - `grip_class`: Use a custom [Grip class](#class-gripflask)
-- `dark`: Render theme in dark mode
 
 
 #### export
@@ -219,7 +218,7 @@ serve(path=None, host=None, port=None, user_content=False, context=None, usernam
 Writes the specified Readme file to an HTML file with styles and assets inlined.
 
 ```python
-export(path=None, user_content=False, context=None, username=None, password=None, render_offline=False, render_wide=False, render_inline=True, out_filename=None, api_url=None, title=None, quiet=None, grip_class=None, dark=False)
+export(path=None, user_content=False, context=None, username=None, password=None, render_offline=False, render_wide=False, render_inline=True, out_filename=None, api_url=None, title=None, quiet=None, theme='light', grip_class=None)
 ```
 
 - `path`: The filename to render, or the directory containing your Readme file, defaulting to the current working directory
@@ -235,6 +234,5 @@ export(path=None, user_content=False, context=None, username=None, password=None
 - `api_url`: Not used. Set to `None`
 - `title`: The page title, derived from `path` by default
 - `quiet`: Do not print to the terminal
+- `theme`: Theme to view markdown file (light mode or dark mode). Valid options ("light", "dark"). Default: "light".
 - `grip_class`: Use a custom [Grip class](#class-gripflask)
-- `dark`: Render theme in dark mode
-

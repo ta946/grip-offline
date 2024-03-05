@@ -34,7 +34,7 @@ def read(filename):
 
 setup(
     name='grip-offline',
-    version='4.6.1',
+    version='4.6.2',
     description='Render local markdown files offline.',
     long_description=__doc__,
     author='ta946',
