@@ -6,15 +6,13 @@ Grip-offline -- Markdown offline rendering server
 
 Render local markdown files offline.
 
-**Grip-offline** is a command-line server application written in Python that uses 
-code taken from SublimeText plugin [MarkdownPreview v2.4.2](https://github.com/facelessuser/MarkdownPreview/releases/tag/st3-2.4.2)
+**Grip-offline** is a command-line server application written in Python that uses github's `cmarkgfm` python package to render github-flavoured markdown otherwise
+falls back to code taken from SublimeText plugin [MarkdownPreview v2.4.2](https://github.com/facelessuser/MarkdownPreview/releases/tag/st3-2.4.2)
 to render local markdown files in your browser and allow you to follow their links. Changes you make to the Readme will be instantly reflected in the browser without requiring a page refresh.
 
-
-The styles and rendering are a close apporximation to Github's renderer and will not be exactly the same so keep that it mind.
+`MarkdownPreview` uses styles and rendering which is a close apporximation to Github's renderer and will not be exactly the same so keep that it mind.
 
 Also, this fork has been modified to work for simple offline rendering only.
-The other functionality has not been tested and may not work.
 
 
 
@@ -50,6 +48,13 @@ You can also specify a port, used `--theme="dark"` to render in dark mode and/or
 ```console
 $ grip 80 -b --theme="dark"
  * Running on http://localhost:80/
+```
+
+By default github's renderer will be used, otherwise it will fallback to MarkdownPreview for github-flavoured rendering. you can force MarkdownPreview or CommonMark (regular non-github markdown):
+
+```console
+$ grip 80 --renderer="markdownpreview"
+$ grip 80 --renderer="commonmark"
 ```
 
 Or an explicit file:

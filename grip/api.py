@@ -7,11 +7,11 @@ import errno
 
 from .app import Grip
 from .readers import DirectoryReader, StdinReader, TextReader
-from .renderers import GitHubRenderer, OfflineRenderer
+from .renderers import get_renderer, CommonMarkRenderer, GitHubRenderer, OfflineRenderer
 
 
 def create_app(path=None, user_content=False, context=None, username=None,
-               password=None, render_offline=False, render_wide=False,
+               password=None, renderer=None, render_wide=False,
                render_inline=False, api_url=None, title=None, text=None,
                autorefresh=None, quiet=None, theme='light', grip_class=None):
     """
@@ -31,12 +31,7 @@ def create_app(path=None, user_content=False, context=None, username=None,
         source = DirectoryReader(path)
 
     # Customize the renderer
-    if render_offline:
-        renderer = OfflineRenderer(user_content, context)
-    elif user_content or context or api_url:
-        renderer = GitHubRenderer(user_content, context, api_url)
-    else:
-        renderer = None
+    renderer = get_renderer(renderer, user_content, context)
 
     # Optional basic auth
     auth = (username, password) if username or password else None
@@ -47,7 +42,7 @@ def create_app(path=None, user_content=False, context=None, username=None,
 
 
 def serve(path=None, host=None, port=None, user_content=False, context=None,
-          username=None, password=None, render_offline=False,
+          username=None, password=None, renderer=None,
           render_wide=False, render_inline=False, api_url=None, title=None,
           autorefresh=True, browser=False, quiet=None, theme='light', grip_class=None):
     """
@@ -55,7 +50,7 @@ def serve(path=None, host=None, port=None, user_content=False, context=None,
     a README.
     """
     app = create_app(path, user_content, context, username, password,
-                     render_offline, render_wide, render_inline, api_url,
+                     renderer, render_wide, render_inline, api_url,
                      title, None, autorefresh, quiet, theme, grip_class)
     app.run(host, port, open_browser=browser)
 
@@ -71,31 +66,30 @@ def clear_cache(grip_class=None):
 
 def render_page(path=None, user_content=False, context=None,
                 username=None, password=None,
-                render_offline=False, render_wide=False, render_inline=False,
+                renderer=None, render_wide=False, render_inline=False,
                 api_url=None, title=None, text=None, quiet=None, theme='light',
                 grip_class=None):
     """
     Renders the specified markup text to an HTML page and returns it.
     """
     return create_app(path, user_content, context, username, password,
-                      render_offline, render_wide, render_inline, api_url,
+                      renderer, render_wide, render_inline, api_url,
                       title, text, False, quiet, theme, grip_class).render()
 
 
 def render_content(text, user_content=False, context=None, username=None,
-                   password=None, render_offline=False, api_url=None):
+                   password=None, renderer=None, api_url=None):
     """
     Renders the specified markup and returns the result.
     """
-    renderer = (GitHubRenderer(user_content, context, api_url)
-                if not render_offline else
-                OfflineRenderer(user_content, context))
+    renderer = get_renderer(renderer, user_content, context)
+
     auth = (username, password) if username or password else None
     return renderer.render(text, auth)
 
 
 def export(path=None, user_content=False, context=None,
-           username=None, password=None, render_offline=False,
+           username=None, password=None, renderer=None,
            render_wide=False, render_inline=True, out_filename=None,
            api_url=None, title=None, quiet=False, theme='light', grip_class=None):
     """
@@ -114,7 +108,7 @@ def export(path=None, user_content=False, context=None,
         print('Exporting to', out_filename, file=sys.stderr)
 
     page = render_page(path, user_content, context, username, password,
-                       render_offline, render_wide, render_inline, api_url,
+                       renderer, render_wide, render_inline, api_url,
                        title, None, quiet, theme, grip_class)
 
     if export_to_stdout:
