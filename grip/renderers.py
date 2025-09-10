@@ -67,7 +67,6 @@ class GitHubRenderer(ReadmeRenderer):
         """
         Renders the specified markdown content and embedded styles.
         """
-        print('cmark GitHubRenderer!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         return cmarkgfm.github_flavored_markdown_to_html(text)
 
 
